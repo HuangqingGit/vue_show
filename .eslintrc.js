@@ -15,11 +15,19 @@ module.exports = {
   },
 
   rules: {
+    'semi': 0,
+    'indent': 'off',
     'no-console': 'off',
-    'no-debugger': 'off'
+    'no-debugger': 'off',
+    "space-before-function-paren": 0
   },
 
   extends: [
+    'plugin:vue/essential',
+    '@vue/standard'
+  ],
+
+  'extends': [
     'plugin:vue/essential',
     '@vue/standard'
   ]

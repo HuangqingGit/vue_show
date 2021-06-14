@@ -1,6 +1,7 @@
 <template>
   <div id="app">
-    Unexpected trailing comma  comma-dangle
+    <!-- 路由占位符 -->
+    <router-view></router-view>
   </div>
 </template>
 
@@ -12,5 +13,4 @@ export default {
 </script>
 
 <style>
-
 </style>
