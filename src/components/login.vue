@@ -100,7 +100,7 @@ export default {
             // 星星的密集程度，数字越大越多
             const density = 800
             // 星星的看起来的距离,值越大越远,可自行调制到自己满意的样子41
-            const spacing = 800
+            const spacing = 1000
             const starsr = $('.stars')
             for (var i = 0; i < density; i++) {
                 // var $star = $('<div></div>').addClass('star_item')
@@ -176,6 +176,7 @@ export default {
         width: 700px;
         height: 450px;
         background-color: #fff;
+        opacity: 0.85;
         border-radius: 8px;
         padding: 10px;
 
