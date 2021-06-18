@@ -44,16 +44,22 @@
                     </template>
                     <template slot-scope="scope">
                         <div class="center_box_but">
-                            <el-tooltip class="item" effect="dark" content="编辑用户" placement="top" :enterable="false">
+                            <el-tooltip class="item" effect="dark" content="编辑用户" placement="top" :enterable="false" :open-delay="500">
                                 <el-button type="primary" icon="el-icon-edit" size="small" @click="showEditDialog(scope.row.id)"></el-button>
                             </el-tooltip>
-                            <el-tooltip class="item" effect="dark" content="删除用户" placement="top" :enterable="false">
+                            <el-tooltip class="item" effect="dark" content="删除用户" placement="top" :enterable="false" :open-delay="500">
                                 <el-popconfirm placement="left" title="此操作将永久删除此用户，是否继续？" icon="el-icon-warning" @confirm="yesDeleteUser(scope.row.id)">
                                     <el-button slot="reference" type="danger" icon="el-icon-delete" size="small"></el-button>
                                 </el-popconfirm>
                             </el-tooltip>
-                            <el-tooltip class="item" effect="dark" content="分配权限" placement="top" :enterable="false">
-                                <el-button type="warning" icon="el-icon-setting" size="small"></el-button>
+                            <el-tooltip class="item" effect="dark" content="权限分配" placement="top" :enterable="false" :open-delay="500">
+                                <el-popover placement="left" width="160" :value="levelUserPopover" @show="levelUserPopover=true">
+                                    <div class="userLever_box">角色分配</div>
+                                    <el-select v-model="userListSelect.roleName" :placeholder="scope.row.role_name" @change="submitNewRole(scope.row.id,$event)" size="small">
+                                        <el-option v-for="item in userListSelect" :key="item.id" :label="item.roleName" :value="item.id"></el-option>
+                                    </el-select>
+                                    <el-button slot="reference" type="warning" icon="el-icon-setting" size="small" @click="getRoleList(scope.row.id)"></el-button>
+                                </el-popover>
                             </el-tooltip>
                         </div>
                     </template>
@@ -106,7 +112,7 @@
                 </span>
             </template>
             <span>
-                <el-form status-icon ref="editUserFormRef" :model="editUserFrom" :rules="FromRules" class="addUserForm" label-width="70px">
+                <el-form status-icon ref="editUserFormRef" :model="editUserFrom" :rules="FromRules" class="editUserForm" label-width="70px">
                     <el-form-item label="用户名">
                         <el-input type="text" v-model="editUserFrom.username" autocomplete="off" disabled></el-input>
                     </el-form-item>
@@ -138,12 +144,16 @@ export default {
             },
             // 用户列表
             userlist: [],
+            // 角色列表下拉选项
+            userListSelect: [],
             // 全部页数
             total: 0,
             // 是否显示添加用户Dialog
             addUserDialog: false,
             // 是否显示修改用户Dialog
             editUserDialog: false,
+            // 是否显示权限分配Popover
+            levelUserPopover: false,
             // 添加用户表单数据
             addUserFrom: {
                 username: 'qwertty',
@@ -266,6 +276,20 @@ export default {
             if (res.meta.status !== 200) return this.$message.error('删除失败：' + res.meta.msg)
             this.$message.success(res.meta.msg)
             this.getUserList()
+        },
+        // 获取角色列表
+        async getRoleList (row) {
+            const { data: res } = await this.$http.get('roles')
+            if (res.meta.status !== 200) return this.$message.error('错误：' + res.meta.msg)
+            this.userListSelect = res.data
+        },
+        // 提交用户角色分配
+        async submitNewRole (id, e) {
+            this.levelUserPopover = false
+            const { data: res } = await this.$http.put(`users/${id}/role`, { rid: e })
+            if (res.meta.status !== 200) return this.$message.error('分配失败：' + res.meta.msg)
+            this.$message.success('角色分配成功')
+            this.getUserList()
         }
     }
 }
@@ -315,6 +339,11 @@ export default {
         display: flex;
         justify-content: space-evenly;
     }
+}
+
+.userLever_box {
+    margin-bottom: 0.4rem;
+    color: #606266;
 }
 
 .classIcon {

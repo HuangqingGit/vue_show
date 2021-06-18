@@ -2,7 +2,7 @@ import Vue from 'vue'
 import {
     Button, Avatar, Input, Form, FormItem, Message,
     Container, header, aside, main, Menu, Submenu, MenuItem, MenuItemGroup,
-    Breadcrumb, BreadcrumbItem, Card, Row, Col, Table, TableColumn, Switch, Tooltip, Pagination, Dialog, Popover, Popconfirm
+    Breadcrumb, BreadcrumbItem, Card, Row, Col, Table, TableColumn, Switch, Tooltip, Pagination, Dialog, Popover, Popconfirm, Select, Option
 } from 'element-ui'
 
 // 注册按钮组件
@@ -55,6 +55,10 @@ Vue.use(Dialog)
 Vue.use(Popover)
 // 注册 Popconfirm 气泡确认框组件
 Vue.use(Popconfirm)
+// 注册 Select 选择器组件
+Vue.use(Select)
+// 注册 Select Option组件
+Vue.use(Option)
 
 // 全局挂载弹窗消息
 Vue.prototype.$message = Message
