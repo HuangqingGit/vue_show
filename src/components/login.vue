@@ -42,15 +42,6 @@
 import $ from 'jquery'
 export default {
     data () {
-        // 自定义表单验证
-        var VerifyPassword = (rule, value, callback) => {
-            // const reg = /^.*(?=.{8,18})(?=.*[0-9])(?=.*[A-z])(?=.*[!@#$%^&*?.+-]).*$/
-            // if (!reg.test(value)) {
-            //     callback(new Error('密码必须包含数字、字母、特殊符号，且需保持在8-18位之间'));
-            // } else {
-            callback()
-            // }
-        }
         return {
             // 表单数据绑定对象
             loginForm: {
@@ -61,33 +52,18 @@ export default {
             loginFormRules: {
                 // 验证用户名是否合法
                 username: [
-                    {
-                        required: true,
-                        message: '请输入用户名/账号',
-                        trigger: 'blur'
-                    }
-                    // ,
-                    // {
-                    //     min: 5,
-                    //     max: 10,
-                    //     message: '长度在 5 到 10 个字符',
-                    //     trigger: 'blur'
-                    // }
+                    { required: true, message: '请输入用户名', trigger: 'blur' },
+                    { min: 5, max: 10, message: '长度在 5 到 10 个字符', trigger: 'blur' }
                 ],
                 // 验证密码格式是否合法
                 password: [
-                    {
-                        required: true,
-                        message: '请输入你的登录密码',
-                        trigger: 'blur'
-                    },
+                    // { required: true, message: '请输入登录密码', trigger: 'blur' },
+                    // { min: 8, max: 18, message: '长度异常：密码长度必须在 8 到 18 个字符之间', trigger: 'blur' },
                     // {
-                    //     min: 8,
-                    //     max: 18,
-                    //     message: '密码长度必须在 8 到 18 个字符之间',
+                    //     pattern: /^.*(?=.{8,18})(?=.*[0-9])(?=.*[A-z])(?=.*[!@#$%^&*?.+-]).*$/,
+                    //     message: '格式有误：密码必须包含数字、字母、特殊符号，且需保持在8-18位之间',
                     //     trigger: 'blur'
-                    // },
-                    { validator: VerifyPassword, trigger: 'blur' }
+                    // }
                 ]
             }
         }
