@@ -8,7 +8,7 @@ import './plugins/element.js'
 import './assets/css/global.css'
 
 // 配置请求根路径
-axios.defaults.baseURL = 'http://shopapi.kuckji.cn/api/private/v1/'
+axios.defaults.baseURL = 'https://liulongbin.top:8888/api/private/v1/'
 axios.interceptors.request.use(cofig => {
   cofig.headers.Authorization = window.sessionStorage.getItem('token')
   return cofig

@@ -245,16 +245,15 @@ export default {
                 this.editUserDialog = false
             })
         },
-        // 重置表单
-        // 监听添加用户对话框关闭事件
+        // 监听添加用户对话框关闭事件并重置表单
         resetAddUserForm () {
             this.$refs.addUserFormRef.resetFields()
         },
-        // 监听修改用户对话框关闭事件
+        // 监听修改用户对话框关闭事件重置表单
         resetEditUserForm () {
             this.$refs.editUserFormRef.resetFields()
         },
-        // 编辑用户
+        // 编辑用户并读取用户信息
         async showEditDialog (id) {
             const { data: res } = await this.$http.get(`users/${id}`)
             if (res.meta.status !== 200) return this.$message.error('获取用户信息失败!')
