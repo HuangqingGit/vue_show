@@ -2,6 +2,7 @@ import Vue from 'vue'
 import App from './App.vue'
 import router from './router'
 import axios from 'axios'
+import jQuery from 'jquery'
 import './plugins/element.js'
 
 // 引入全局样式
@@ -14,6 +15,7 @@ axios.interceptors.request.use(cofig => {
   return cofig
 })
 
+Vue.prototype.$ = jQuery
 Vue.prototype.$http = axios
 Vue.config.productionTip = false
 new Vue({

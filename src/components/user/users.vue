@@ -112,7 +112,7 @@
                 </span>
             </template>
             <span>
-                <el-form status-icon ref="editUserFormRef" :model="editUserFrom" :rules="FromRules" class="editUserForm" label-width="70px">
+                <el-form status-icon ref="editUserFormRef" :model="editUserFrom" :rules="FromRules" class="editUserForm" label-width="60px">
                     <el-form-item label="用户名">
                         <el-input type="text" v-model="editUserFrom.username" autocomplete="off" disabled></el-input>
                     </el-form-item>
@@ -204,6 +204,9 @@ export default {
     },
     created () {
         this.getUserList()
+    },
+    mounted () {
+        this.$('.el-table__body-wrapper').addClass('scroll')
     },
     methods: {
         // 获取用户列表

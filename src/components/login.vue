@@ -39,7 +39,6 @@
 </template>
 
 <script>
-import $ from 'jquery'
 export default {
     data () {
         return {
@@ -77,14 +76,12 @@ export default {
             const density = 800
             // 星星的看起来的距离,值越大越远,可自行调制到自己满意的样子41
             const spacing = 1000
-            const starsr = $('.stars')
+            const starsr = this.$('.stars')
             for (var i = 0; i < density; i++) {
-                // var $star = $('<div></div>').addClass('star_item')
-                // console.log($star)
-                starsr.append($('<div></div>').addClass('star_item'))
+                starsr.append(this.$('<div></div>').addClass('star_item'))
             }
-            $('.star_item').each(function () {
-                var cur = $(this)
+            this.$('.star_item').each(function () {
+                var cur = this.$(this)
                 var s = 0.2 + (Math.random() * 1)
                 var curR = spacing + (Math.random() * 300)
                 cur.css({
