@@ -18,7 +18,8 @@
                 </el-col>
             </el-row>
             <!-- 用户列表区域 -->
-            <el-table :data="userlist" border stripe height="auto" class="table_box">
+            <el-table v-loading="loading" element-loading-text="正则获取用户列表" element-loading-background="rgba(255, 255, 255, 0.5)" empty-text=" "
+                :data="userlist" border stripe height="auto" class="table_box">
                 <el-table-column type="index" label="#"></el-table-column>
                 <el-table-column label="姓 名" prop="username" min-width="120px"></el-table-column>
                 <el-table-column label="角 色" prop="role_name" min-width="120px"></el-table-column>
@@ -44,17 +45,21 @@
                                 <el-button type="primary" icon="el-icon-edit" size="small" @click="showEditDialog(scope.row.id)"></el-button>
                             </el-tooltip>
                             <el-tooltip class="item" effect="dark" content="删除用户" placement="top" :enterable="false" :open-delay="500">
-                                <el-popconfirm placement="left" title="此操作将永久删除此用户，是否继续？" icon="el-icon-warning" @confirm="yesDeleteUser(scope.row.id)">
-                                    <el-button slot="reference" type="danger" icon="el-icon-delete" size="small"></el-button>
+                                <el-popconfirm placement="left" title="此操作将永久删除此用户，是否继续？" icon="el-icon-warning"
+                                    @confirm="yesDeleteUser(scope.row.id)">
+                                    <el-button slot="reference" type="danger" icon="el-icon-delete" size="small">
+                                    </el-button>
                                 </el-popconfirm>
                             </el-tooltip>
                             <el-tooltip class="item" effect="dark" content="权限分配" placement="top" :enterable="false" :open-delay="500">
                                 <el-popover placement="left" width="160" :value="levelUserPopover" @show="levelUserPopover=true">
                                     <div class="userLever_box">角色分配</div>
-                                    <el-select v-model="userListSelect.roleName" :placeholder="scope.row.role_name" @change="submitNewRole(scope.row.id,$event)" size="small">
+                                    <el-select v-model="userListSelect.roleName" :placeholder="scope.row.role_name"
+                                        @change="submitNewRole(scope.row.id,$event)" size="small">
                                         <el-option v-for="item in userListSelect" :key="item.id" :label="item.roleName" :value="item.id"></el-option>
                                     </el-select>
-                                    <el-button slot="reference" type="warning" icon="el-icon-setting" size="small" @click="getRoleList(scope.row.id)"></el-button>
+                                    <el-button slot="reference" type="warning" icon="el-icon-setting" size="small" @click="getRoleList(scope.row.id)">
+                                    </el-button>
                                 </el-popover>
                             </el-tooltip>
                         </div>
@@ -63,15 +68,16 @@
             </el-table>
             <!-- 页脚分页区域 -->
             <div class="pagination_box">
-                <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="queryInfo.pagenum" :page-sizes="[10, 20, 30, 40, 50]"
-                    :page-size="queryInfo.pagesize" layout="total, sizes, prev, pager, next, jumper" :total="total">
+                <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="queryInfo.pagenum"
+                    :page-sizes="[10, 20, 30, 40, 50]" :page-size="queryInfo.pagesize" layout="total, sizes, prev, pager, next, jumper"
+                    :total="total">
                 </el-pagination>
             </div>
         </el-card>
 
         <!-- 添加用户的对话框 -->
-        <el-dialog :visible.sync="addUserDialog" width="30%" @closed="resetAddUserForm" :close-on-click-modal="false" v-on:keyup.enter.native="addUserVerify"
-            v-on:keyup.esc.native="addUserDialog=false">
+        <el-dialog :visible.sync="addUserDialog" width="30%" @closed="resetAddUserForm" :close-on-click-modal="false"
+            v-on:keyup.enter.native="addUserVerify" v-on:keyup.esc.native="addUserDialog=false">
             <template slot="title">
                 <span class="dialog-title">
                     <i class="iconfont show-icon-tianjiayonghu"></i>添加用户
@@ -83,7 +89,8 @@
                         <el-input type="text" v-model="addUserFrom.username" autocomplete="off"></el-input>
                     </el-form-item>
                     <el-form-item label="密码" prop="password">
-                        <el-input type="password" v-model="addUserFrom.password" autocomplete="off" show-password></el-input>
+                        <el-input type="password" v-model="addUserFrom.password" autocomplete="off" show-password>
+                        </el-input>
                     </el-form-item>
                     <el-form-item label="邮箱" prop="email">
                         <el-input v-model="addUserFrom.email"></el-input>
@@ -100,8 +107,8 @@
         </el-dialog>
 
         <!-- 修改用户的对话框 -->
-        <el-dialog :visible.sync="editUserDialog" width="30%" @closed="resetEditUserForm" :close-on-click-modal="false" v-on:keyup.enter.native="editUserVerify"
-            v-on:keyup.esc.native="editUserDialog=false">
+        <el-dialog :visible.sync="editUserDialog" width="30%" @closed="resetEditUserForm" :close-on-click-modal="false"
+            v-on:keyup.enter.native="editUserVerify" v-on:keyup.esc.native="editUserDialog=false">
             <template slot="title">
                 <span class="dialog-title">
                     <i class="iconfont el-icon-edit"></i>编辑用户
@@ -141,6 +148,8 @@ export default {
             bar: { noe: '用户管理', two: '用户列表' },
             // 获取用户列表请求参数
             queryInfo: { query: '', pagenum: 1, pagesize: 20 },
+            // 懒加载状态
+            loading: true,
             // 用户列表
             userlist: [],
             // 角色列表下拉选项
@@ -209,15 +218,18 @@ export default {
             if (res.meta.status !== 200) return this.$message.error('获取用户列表失败')
             this.userlist = res.data.users
             this.total = res.data.total
+            this.loading = false
         },
         // 监听单页最大显示数量改变事件
         handleSizeChange (newSize) {
             this.queryInfo.pagesize = newSize
+            this.loading = true
             this.getUserList()
         },
         // 监听页码改变事件
         handleCurrentChange (newPage) {
             this.queryInfo.pagenum = newPage
+            this.loading = true
             this.getUserList()
         },
         // 修改用户状态
@@ -237,6 +249,7 @@ export default {
                 const { data: result } = await this.$http.post('users', this.addUserFrom)
                 if (result.meta.status !== 201) return this.$message.error('创建失败：' + result.meta.msg)
                 this.$message.success(result.meta.msg)
+                this.loading = true
                 this.getUserList()
                 this.addUserDialog = false
             })
@@ -248,6 +261,7 @@ export default {
                 const { data: result } = await this.$http.put(`users/${this.editUserFrom.id}`, this.editUserFrom)
                 if (result.meta.status !== 200) return this.$message.error('更新失败：' + result.meta.msg)
                 this.$message.success(result.meta.msg)
+                this.loading = true
                 this.getUserList()
                 this.editUserDialog = false
             })
@@ -272,6 +286,7 @@ export default {
             const { data: res } = await this.$http.delete(`users/${id}`)
             if (res.meta.status !== 200) return this.$message.error('删除失败：' + res.meta.msg)
             this.$message.success(res.meta.msg)
+            this.loading = true
             this.getUserList()
         },
         // 获取角色列表
@@ -286,6 +301,7 @@ export default {
             const { data: res } = await this.$http.put(`users/${id}/role`, { rid: e })
             if (res.meta.status !== 200) return this.$message.error('分配失败：' + res.meta.msg)
             this.$message.success('角色分配成功')
+            this.loading = true
             this.getUserList()
         }
     }
@@ -319,11 +335,6 @@ export default {
     }
     .pagination_box {
         margin-top: 10px;
-        display: flex;
-        justify-content: center;
-    }
-
-    .center_box {
         display: flex;
         justify-content: center;
     }

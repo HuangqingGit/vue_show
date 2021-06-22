@@ -8,13 +8,15 @@
             <el-col>
                 <el-button type="primary" @click="addRolesDialog=true">添加角色</el-button>
             </el-col>
-            <el-table :data="rolesList" border stripe height="auto" class="table_box">
+            <el-table v-loading="loading" element-loading-text="正则获取角色分类" element-loading-background="rgba(255, 255, 255, 0.5)" empty-text=" "
+                :data="rolesList" border stripe height="auto" class="table_box">
                 <el-table-column type="expand">
                     <template slot-scope="scope">
                         <el-row :class="['bdbottom', i1 === 0 ? 'bdtop':'']" v-for="(itme1,i1) in scope.row.children" :key="itme1.id">
                             <!-- 渲染一级权限 -->
                             <el-col :span="4">
-                                <el-tag closable @close="removeRightById(scope.row,itme1.id)">{{itme1.authName}}</el-tag>
+                                <el-tag closable @close="removeRightById(scope.row,itme1.id)">
+                                    {{itme1.authName}}</el-tag>
                                 <i class="el-icon-caret-right"></i>
                             </el-col>
                             <!-- 渲染二级三级权限 -->
@@ -22,12 +24,13 @@
                                 <!-- 渲染二级权限 -->
                                 <el-row :class="[i2 === 0 ? '':'bdtop']" v-for="(itme2,i2) in itme1.children" :key="itme2.id">
                                     <el-col :span="5">
-                                        <el-tag closable @close="removeRightById(scope.row,itme2.id)" type="success">{{itme2.authName}}</el-tag>
+                                        <el-tag closable @close="removeRightById(scope.row,itme2.id)" type="success">
+                                            {{itme2.authName}}</el-tag>
                                         <i class="el-icon-caret-right"></i>
                                     </el-col>
                                     <el-col :span="19">
-                                        <el-tag closable @close="removeRightById(scope.row,itme3.id)" type="warning" :class="[i3 === 0 ? '':'bdtop']" v-for="(itme3,i3) in itme2.children"
-                                            :key="itme3.id">
+                                        <el-tag closable @close="removeRightById(scope.row,itme3.id)" type="warning" :class="[i3 === 0 ? '':'bdtop']"
+                                            v-for="(itme3,i3) in itme2.children" :key="itme3.id">
                                             {{itme3.authName}}</el-tag>
                                     </el-col>
                                 </el-row>
@@ -49,8 +52,10 @@
                                 <el-button type="primary" icon="el-icon-edit" size="small" @click="showRosesDialog(scope.row.id)"></el-button>
                             </el-tooltip>
                             <el-tooltip class="item" effect="dark" content="删除用户" placement="top" :enterable="false" :open-delay="500">
-                                <el-popconfirm placement="left" title="此操作将永久删除此用户，是否继续？" icon="el-icon-warning" @confirm="yesDeleteUser(scope.row.id)">
-                                    <el-button slot="reference" type="danger" icon="el-icon-delete" size="small"></el-button>
+                                <el-popconfirm placement="left" title="此操作将永久删除此用户，是否继续？" icon="el-icon-warning"
+                                    @confirm="yesDeleteUser(scope.row.id)">
+                                    <el-button slot="reference" type="danger" icon="el-icon-delete" size="small">
+                                    </el-button>
                                 </el-popconfirm>
                             </el-tooltip>
                             <el-tooltip class="item" effect="dark" content="权限分配" placement="top" :enterable="false" :open-delay="500">
@@ -63,8 +68,8 @@
         </el-card>
 
         <!-- 添加角色的对话框 -->
-        <el-dialog :visible.sync="addRolesDialog" width="30%" @closed="resetaddRolesForm" :close-on-click-modal="false" v-on:keyup.enter.native="addUserVerify"
-            v-on:keyup.esc.native="addRolesDialog=false">
+        <el-dialog :visible.sync="addRolesDialog" width="30%" @closed="resetaddRolesForm" :close-on-click-modal="false"
+            v-on:keyup.enter.native="addUserVerify" v-on:keyup.esc.native="addRolesDialog=false">
             <template slot="title">
                 <span class="dialog-title">
                     <i class="iconfont el-icon-edit"></i>添加角色
@@ -87,8 +92,8 @@
         </el-dialog>
 
         <!-- 编辑角色的对话框 -->
-        <el-dialog :visible.sync="rolesUserDialog" width="30%" @closed="resetRolesForm" :close-on-click-modal="false" v-on:keyup.enter.native="rolesUserVerify"
-            v-on:keyup.esc.native="rolesUserDialog=false">
+        <el-dialog :visible.sync="rolesUserDialog" width="30%" @closed="resetRolesForm" :close-on-click-modal="false"
+            v-on:keyup.enter.native="rolesUserVerify" v-on:keyup.esc.native="rolesUserDialog=false">
             <template slot="title">
                 <span class="dialog-title">
                     <i class="iconfont el-icon-edit"></i>编辑角色
@@ -114,8 +119,8 @@
         </el-dialog>
 
         <!-- 权限分配的对话框 -->
-        <el-dialog class="power-box" :visible.sync="setPowerDialog" width="50%" @closed="resetPowerForm" :close-on-click-modal="false" v-on:keyup.enter.native="setPowerVerify"
-            v-on:keyup.esc.native="setPowerDialog=false">
+        <el-dialog class="power-box" :visible.sync="setPowerDialog" width="50%" @closed="resetPowerForm" :close-on-click-modal="false"
+            v-on:keyup.enter.native="setPowerVerify" v-on:keyup.esc.native="setPowerDialog=false">
             <template slot="title">
                 <span class="dialog-title">
                     <i class="iconfont el-icon-setting"></i>权限分配
@@ -124,8 +129,8 @@
             <span>
                 <el-input placeholder="请输入关键字" v-model="powerTextKey" clearable></el-input>
                 <div class="opwerTreeRefBox scroll">
-                    <el-tree ref="treeRef" node-key="id" :data="powerLists" :filter-node-method="filterNode" :default-expanded-keys="userPowerID" :default-checked-keys="userPowerID" show-checkbox
-                        :props="defaultProps">
+                    <el-tree ref="treeRef" node-key="id" :data="powerLists" :filter-node-method="filterNode" :default-expanded-keys="userPowerID"
+                        :default-checked-keys="userPowerID" show-checkbox :props="defaultProps">
                     </el-tree>
                 </div>
             </span>
@@ -151,6 +156,8 @@ export default {
             userID: '',
             // 当前用户用于的权限
             userPowerID: [],
+            // 懒加载状态
+            loading: true,
             // 添加角色表单
             addUserForm: {
                 roleName: '',
@@ -214,12 +221,14 @@ export default {
             const { data: res } = await this.$http.get('roles')
             if (res.meta.status !== 200) return this.$message.error('错误：' + res.meta.msg)
             this.rolesList = res.data
+            this.loading = false
         },
         // 确认删除用户
         async yesDeleteUser (id) {
             const { data: res } = await this.$http.delete(`roles/${id}`)
             if (res.meta.status !== 200) return this.$message.error('删除失败：' + res.meta.msg)
             this.$message.success(res.meta.msg)
+            this.loading = true
             this.getRolesLest()
         },
         // 显示角色编辑弹窗并获取角色信息
@@ -248,6 +257,7 @@ export default {
                 if (res.meta.status !== 201) return this.$message.error('添加失败：' + res.meta.msg)
                 this.rolesForm = res.data
                 this.$message.success('添加成功')
+                this.loading = true
                 this.getRolesLest()
                 this.addRolesDialog = false
             })
@@ -260,6 +270,7 @@ export default {
                 if (res.meta.status !== 200) return this.$message.error('更新失败：' + res.meta.msg)
                 this.rolesForm = res.data
                 this.$message.success('更新成功')
+                this.loading = true
                 this.getRolesLest()
                 this.rolesUserDialog = false
             })
@@ -271,6 +282,7 @@ export default {
             if (res.meta.status !== 200) return this.$message.error('更新失败：' + res.meta.msg)
             this.$message.success('权限分配成功')
             this.setPowerDialog = false
+            this.loading = true
             this.getRolesLest()
         },
         // 监听添加角色对话框关闭事件并重置表单

@@ -35,3 +35,25 @@ body {
     background: #ededed;
     border-radius: 10px;
 }
+
+.left_text {
+    text-align: left !important;
+}
+
+.center_text {
+    text-align: center;
+}
+
+.right_text {
+    text-align: right;
+}
+
+.center_box {
+    display: flex;
+    justify-content: center;
+}
+
+.right_box {
+    display: flex;
+    justify-content: right;
+}

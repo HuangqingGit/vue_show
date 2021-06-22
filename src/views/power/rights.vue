@@ -5,16 +5,17 @@
 
         <!-- 卡片视图区域 -->
         <el-card>
-            <el-table :data="powerLists" border stripe height="auto" class="table_box">
+            <el-table v-loading="loading" element-loading-text="正则获取权限列表" element-loading-background="rgba(255, 255, 255, 0.5)" empty-text=" "
+                :data="powerLists" border stripe height="auto" class="table_box">
                 <el-table-column type="index" label="#"></el-table-column>
                 <el-table-column label="权限名称" prop="authName"></el-table-column>
                 <el-table-column label="权限 ID" prop="id"></el-table-column>
                 <el-table-column label="权限路径" prop="path"></el-table-column>
                 <el-table-column label="权限等级" prop="level">
                     <template slot-scope="scope">
-                        <el-tag v-if="scope.row.level === '0'">一级</el-tag>
-                        <el-tag v-if="scope.row.level === '1'" type="success">二级</el-tag>
-                        <el-tag v-if="scope.row.level === '2'" type="warning">三级</el-tag>
+                        <el-tag effect="dark" size="small" v-if="scope.row.level === '0'">一级</el-tag>
+                        <el-tag effect="dark" size="small" v-if="scope.row.level === '1'" type="success">二级</el-tag>
+                        <el-tag effect="dark" size="small" v-if="scope.row.level === '2'" type="warning">三级</el-tag>
                     </template>
                 </el-table-column>
             </el-table>
@@ -33,7 +34,9 @@ export default {
         return {
             bar: { noe: '权限管理', two: '权限列表' },
             // 权限列表数组
-            powerLists: []
+            powerLists: [],
+            // 懒加载状态
+            loading: true
         }
     },
     created () {
@@ -48,6 +51,7 @@ export default {
             const { data: res } = await this.$http.get('rights/list')
             if (res.meta.status !== 200) return this.$message.error('错误：' + res.meta.msg)
             this.powerLists = res.data
+            this.loading = false
         }
     }
 }
