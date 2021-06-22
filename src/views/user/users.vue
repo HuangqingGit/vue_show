@@ -1,11 +1,7 @@
 <template>
     <div class="users">
         <!-- 面包屑导航栏 -->
-        <el-breadcrumb separator-class="el-icon-arrow-right">
-            <el-breadcrumb-item :to="{ path: '/home' }">首页</el-breadcrumb-item>
-            <el-breadcrumb-item>用户管理</el-breadcrumb-item>
-            <el-breadcrumb-item>用户列表</el-breadcrumb-item>
-        </el-breadcrumb>
+        <Bar :barName="bar"></Bar>
         <!-- 主要业务区域 -->
         <el-card>
             <!-- 搜索与添加区域 -->
@@ -133,15 +129,18 @@
 </template>
 
 <script>
+import Bar from '../../components/navigationBar.vue'
 export default {
+    // 注册子组件
+    components: {
+        Bar
+    },
     data () {
         return {
+            // 导航栏title
+            bar: { noe: '用户管理', two: '用户列表' },
             // 获取用户列表请求参数
-            queryInfo: {
-                query: '',
-                pagenum: 1,
-                pagesize: 20
-            },
+            queryInfo: { query: '', pagenum: 1, pagesize: 20 },
             // 用户列表
             userlist: [],
             // 角色列表下拉选项
@@ -155,12 +154,7 @@ export default {
             // 是否显示权限分配Popover
             levelUserPopover: false,
             // 添加用户表单数据
-            addUserFrom: {
-                username: 'qwertty',
-                password: 'admin123..+',
-                email: '1666385076@qq.com',
-                mobile: '18780839713'
-            },
+            addUserFrom: { username: 'qwertty', password: 'admin123..+', email: '1666385076@qq.com', mobile: '18780839713' },
             // 修改用户表单数据
             editUserFrom: {},
             // 表单验证规则（共用）
@@ -305,10 +299,6 @@ export default {
     display: flex;
     flex-direction: column;
 
-    .el-breadcrumb {
-        margin-bottom: 15px;
-        font-size: 0.85rem;
-    }
     .el-card {
         box-shadow: 0 1px 1px rgba(0, 0, 0, 0.15) !important;
         flex: 1;

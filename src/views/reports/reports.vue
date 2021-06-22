@@ -1,11 +1,7 @@
 <template>
-    <div class="params">
+    <div class="reports">
         <!-- 面包屑导航栏 -->
-        <el-breadcrumb separator-class="el-icon-arrow-right">
-            <el-breadcrumb-item :to="{ path: '/home' }">首页</el-breadcrumb-item>
-            <el-breadcrumb-item>用户管理</el-breadcrumb-item>
-            <el-breadcrumb-item>分类参数</el-breadcrumb-item>
-        </el-breadcrumb>
+        <Bar :barName="bar"></Bar>
 
         <!-- 卡片视图区域 -->
         <el-card>
@@ -14,8 +10,23 @@
     </div>
 </template>
 
+<script>
+import Bar from '../../components/navigationBar.vue'
+export default {
+    // 注册导航栏子组件
+    components: {
+        Bar
+    },
+    data () {
+        return {
+            bar: { noe: '数据管理', two: '数据报表' }
+        }
+    }
+}
+</script>
+
 <style lang="less" scoped>
-.params {
+.reports {
     box-sizing: content-box;
     height: 100%;
     display: flex;

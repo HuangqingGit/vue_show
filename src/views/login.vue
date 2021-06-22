@@ -10,7 +10,7 @@
             </div>
             <!-- 登录表单 -->
             <div class="login_mes_box">
-                <el-form ref="loginFormRef" :model="loginForm" :rules="loginFormRules" class="form1" status-icon>
+                <el-form ref="loginFormRef" :model="loginForm" :rules="loginFormRules" class="form1" status-icon v-on:keyup.enter.native="loginVerify">
                     <!-- 用户名 -->
                     <el-form-item prop="username">
                         <el-input v-model="loginForm.username" placeholder="用户名/账号">

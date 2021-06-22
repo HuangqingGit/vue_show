@@ -45,14 +45,9 @@
 </template>
 
 <script>
-import $ from 'jquery'
 export default {
     data () {
         return {
-            // 屏幕高度
-            height: $(window).height(),
-            // 屏幕宽度
-            width: $(window).width(),
             // 菜单列表
             MenuList: '',
             // 是否折叠菜单栏
@@ -81,12 +76,6 @@ export default {
     created () {
         this.getMenuList()
         this.activePath = window.sessionStorage.getItem('activePath')
-        $('.main_box').css('height', this.height - 60 + 'px');
-        $(window).resize(function () {
-            this.widthw = $(window).width();
-            this.height = $(window).height();
-            $('.main_box').css('height', this.height - 60 + 'px');
-        });
     },
     // 编译后调用
     mounted () { },
@@ -174,6 +163,10 @@ export default {
         -webkit-transition: all 0.3s;
         transition-timing-function: linear;
         -webkit-transition-timing-function: linear;
+    }
+
+    .main_box {
+        height: calc(100vh - 60px);
     }
 }
 
